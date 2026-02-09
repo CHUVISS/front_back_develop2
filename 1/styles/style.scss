@@ -1,0 +1,136 @@
+
+@use "sass:color";
+
+
+$primary-color: #3498db;
+$border-radius: 8px;
+$spacing-sm: 12px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+// Миксин для теневых эффектов
+@mixin shadow-effect($level: 1) {
+  @if $level == 1 {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  } @else if $level == 2 {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  } @else {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+}
+
+// Миксин для адаптивных изображений
+@mixin responsive-image {
+  max-width: 40%;
+  margin: 0 auto;
+  height: auto;
+  display: block;
+}
+
+// Карточка товара
+.product-card {
+  background: white;
+  border-radius: $border-radius;
+  overflow: hidden;
+  font-family: $font-family;
+  transition: transform 0.3s ease;
+  
+  // Вложенные селекторы
+  &:hover {
+    transform: translateY(-4px);
+    @include shadow-effect(2);
+  }
+  
+  &__image-container {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    
+    img {
+      @include responsive-image;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+      
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+  
+  &__content {
+    padding: $spacing-md;
+    
+    h3 {
+      color: #333;
+      font-size: 18px;
+      margin: 0 0 $spacing-sm 0;
+      font-weight: 600;
+    }
+    
+    p {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 0 0 $spacing-md 0;
+    }
+  }
+  
+  &__price {
+    color: $primary-color;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: $spacing-md;
+  }
+  
+  &__button {
+    display: inline-block;
+    background-color: $primary-color;
+    color: white;
+    padding: $spacing-sm $spacing-lg;
+    border-radius: $border-radius;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    
+    &:hover {
+      // Используем color.scale вместо устаревшего darken()
+      background-color: color.scale($primary-color, $lightness: -18.819%);
+      // Или можно использовать color.adjust:
+      // background-color: color.adjust($primary-color, $lightness: -10%);
+    }
+  }
+  
+  // Модификатор для товара со скидкой
+  &--discount {
+    border: 2px solid #e74c3c;
+    
+    .product-card__price {
+      color: #e74c3c;
+      position: relative;
+      
+      &::after {
+        content: 'Скидка!';
+        position: absolute;
+        background: #e74c3c;
+        color: white;
+        font-size: 12px;
+        padding: 2px 6px;
+        border-radius: 4px;
+        margin-left: 8px;
+      }
+    }
+  }
+}
+
+// Контейнер для демонстрации
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: $spacing-lg;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $spacing-lg;
+}
