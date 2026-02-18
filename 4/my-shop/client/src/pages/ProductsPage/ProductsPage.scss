@@ -1,0 +1,650 @@
+$bg: #0a0e17;
+$bg-darker: #05070a;
+$panel: rgba(255, 255, 255, 0.04);
+$panel-hover: rgba(255, 255, 255, 0.08);
+$border: rgba(255, 255, 255, 0.08);
+$border-hover: rgba(99, 102, 241, 0.3);
+$text: #e7eaf3;
+$text-muted: rgba(231, 234, 243, 0.6);
+
+$primary: #6366f1;
+$primary-bg: rgba(99, 102, 241, 0.15);
+$primary-hover: rgba(99, 102, 241, 0.25);
+
+$danger: #ef4444;
+$danger-bg: rgba(239, 68, 68, 0.12);
+$danger-hover: rgba(239, 68, 68, 0.2);
+
+$success: #22c55e;
+$success-bg: rgba(34, 197, 94, 0.12);
+
+// ===== Анимации =====
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-8px); }
+  60% { transform: translateY(-4px); }
+}
+
+// ===== Mixins =====
+@mixin card($radius: 16px) {
+  border-radius: $radius;
+  border: 1px solid $border;
+  background: $panel;
+}
+
+@mixin container($w: 1100px) {
+  max-width: $w;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@mixin transition($props...) {
+  transition: $props;
+}
+
+// ===== Глобальные стили =====
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: $bg;
+  color: $text;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+// ===== Основная страница =====
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: $bg;
+  color: $text;
+  position: relative;
+  
+  // Фоновый градиент для глубины
+  &::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse at top, rgba(99, 102, 241, 0.08), transparent 50%),
+      radial-gradient(ellipse at bottom, rgba(239, 68, 68, 0.05), transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+  }
+  
+  animation: fadeIn 0.5s ease-out;
+}
+
+// ===== Header =====
+.header {
+  border-bottom: 1px solid $border;
+  background: rgba(10, 14, 23, 0.8);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  animation: fadeInDown 0.6s ease-out;
+
+  &__inner {
+    @include container();
+    padding: 14px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__right {
+    opacity: 0.7;
+    font-size: 13px;
+  }
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: 0.3px;
+  position: relative;
+  cursor: default;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, $primary, transparent);
+    transition: width 0.3s ease;
+  }
+  
+  &:hover::after {
+    width: 100%;
+  }
+}
+
+// ===== Main Content =====
+.main {
+  flex: 1;
+  display: flex;
+}
+
+.container {
+  @include container();
+  padding: 24px 0;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 16px;
+  animation: fadeInUp 0.6s ease-out 0.2s both;
+
+  .title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #fff 0%, $text 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+// ===== Buttons =====
+.btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: 1px solid $border;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  position: relative;
+  overflow: hidden;
+  @include transition(all 0.25s ease);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    transform: translate(-50%, -50%);
+    transition: width 0.5s, height 0.5s;
+  }
+
+  &:hover::before {
+    width: 250px;
+    height: 250px;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: $border-hover;
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &--primary {
+    background: $primary-bg;
+    border-color: rgba($primary, 0.4);
+    color: #fff;
+    
+    &:hover {
+      background: $primary-hover;
+      border-color: $primary;
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.25);
+    }
+  }
+
+  &--danger {
+    background: $danger-bg;
+    border-color: rgba($danger, 0.4);
+    color: #fff;
+    
+    &:hover {
+      background: $danger-hover;
+      border-color: $danger;
+      box-shadow: 0 4px 20px rgba(239, 68, 68, 0.25);
+    }
+  }
+
+  &--small {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+}
+
+// ===== Empty State =====
+.empty {
+  padding: 60px 40px;
+  text-align: center;
+  border: 2px dashed $border;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  animation: fadeIn 0.5s ease-out;
+  font-size: 16px;
+  color: $text-muted;
+}
+
+// ===== Products Grid =====
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+// ===== Product Card =====
+.card {
+  @include card(16px);
+  display: flex;
+  flex-direction: column;
+  animation: fadeInUp 0.6s ease-out both;
+  @include transition(all 0.3s ease);
+  position: relative;
+  overflow: hidden;
+
+  // Stagger animation for grid items
+  &:nth-child(1) { animation-delay: 0.05s; }
+  &:nth-child(2) { animation-delay: 0.1s; }
+  &:nth-child(3) { animation-delay: 0.15s; }
+  &:nth-child(4) { animation-delay: 0.2s; }
+  &:nth-child(5) { animation-delay: 0.25s; }
+  &:nth-child(6) { animation-delay: 0.3s; }
+  &:nth-child(7) { animation-delay: 0.35s; }
+  &:nth-child(8) { animation-delay: 0.4s; }
+  &:nth-child(9) { animation-delay: 0.45s; }
+  &:nth-child(10) { animation-delay: 0.5s; }
+
+  &:hover {
+    transform: translateY(-6px);
+    border-color: $border-hover;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    
+    .card__image {
+      transform: scale(1.03);
+    }
+    
+    .card__actions {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  &__image {
+    // Фиксированный размер картинки
+    width: 100%;
+    height: 200px;
+    
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(239, 68, 68, 0.1));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    @include transition(transform 0.5s ease);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      animation: fadeIn 0.4s ease-out forwards;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 70%;
+      background: linear-gradient(to top, rgba(10, 14, 23, 0.9), transparent);
+      opacity: 0;
+      @include transition(opacity 0.3s ease);
+    }
+  }
+
+  &:hover .card__image::after {
+    opacity: 1;
+  }
+
+  &__body {
+    padding: 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__category {
+    font-size: 11px;
+    opacity: 0.5;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 600;
+    animation: fadeIn 0.5s ease-out 0.3s both;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.3;
+    animation: fadeIn 0.5s ease-out 0.35s both;
+  }
+
+  &__desc {
+    font-size: 13px;
+    opacity: 0.7;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    animation: fadeIn 0.5s ease-out 0.4s both;
+  }
+
+  &__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 12px;
+    animation: fadeIn 0.5s ease-out 0.45s both;
+  }
+
+  &__price {
+    font-weight: 700;
+    font-size: 20px;
+    color: #fff;
+    background: linear-gradient(135deg, #fff 0%, $primary 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  &__rating {
+    color: #fbbf24;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 14px;
+    animation: bounce 0.6s ease-out 0.5s both;
+  }
+
+  &__stock {
+    font-size: 12px;
+    opacity: 0.6;
+    margin-top: 4px;
+    animation: fadeIn 0.5s ease-out 0.5s both;
+  }
+
+  &__actions {
+    display: flex;
+    border-top: 1px solid $border;
+    opacity: 0;
+    transform: translateY(8px);
+    @include transition(all 0.25s ease);
+
+    .btn {
+      flex: 1;
+      border-radius: 0;
+      border: none;
+      border-right: 1px solid $border;
+      padding: 10px;
+      font-size: 13px;
+      
+      &:last-child { border-right: none; }
+      
+      &:hover {
+        background: $panel-hover;
+      }
+    }
+  }
+}
+
+// ===== Footer =====
+.footer {
+  border-top: 1px solid $border;
+  background: rgba(10, 14, 23, 0.8);
+  backdrop-filter: blur(10px);
+  animation: fadeInUp 0.6s ease-out;
+
+  &__inner {
+    @include container();
+    padding: 16px 0;
+    opacity: 0.6;
+    font-size: 13px;
+    text-align: center;
+  }
+}
+
+// ===== Modal Backdrop =====
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 7, 10, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 100;
+  animation: fadeIn 0.25s ease-out;
+}
+
+// ===== Modal =====
+.modal {
+  width: 100%;
+  max-width: 550px;
+  background: #0f1526;
+  border: 1px solid $border;
+  border-radius: 20px;
+  overflow: hidden;
+  animation: scaleIn 0.3s ease-out;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
+
+  &__header {
+    padding: 20px;
+    border-bottom: 1px solid $border;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  &__title {
+    font-weight: 700;
+    font-size: 20px;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 16px 20px;
+    border-top: 1px solid $border;
+    background: rgba(255, 255, 255, 0.02);
+  }
+}
+
+// ===== Form =====
+.form {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: $text-muted;
+  animation: fadeIn 0.4s ease-out both;
+  
+  &:nth-child(1) { animation-delay: 0.1s; }
+  &:nth-child(2) { animation-delay: 0.15s; }
+  &:nth-child(3) { animation-delay: 0.2s; }
+  &:nth-child(4) { animation-delay: 0.25s; }
+  &:nth-child(5) { animation-delay: 0.3s; }
+}
+
+.input {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid $border;
+  background: rgba(255, 255, 255, 0.03);
+  color: $text;
+  font-size: 14px;
+  @include transition(all 0.25s ease);
+  outline: none;
+
+  &:focus {
+    border-color: $primary;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  }
+
+  &::placeholder {
+    color: $text-muted;
+    opacity: 1;
+  }
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+}
+
+// ===== Icon Button =====
+.iconBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid $border;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  @include transition(all 0.25s ease);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: $panel-hover;
+    transform: rotate(90deg);
+  }
+}
+
+// ===== Loading State =====
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+  gap: 10px;
+
+  span {
+    width: 10px;
+    height: 10px;
+    background: $primary;
+    border-radius: 50%;
+    animation: pulse 1.4s ease-in-out infinite both;
+    
+    &:nth-child(1) { animation-delay: -0.32s; }
+    &:nth-child(2) { animation-delay: -0.16s; }
+  }
+}
+
+// ===== Responsive =====
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+  }
+
+  .modal {
+    max-width: 100%;
+    margin: 10px;
+  }
+  
+  .card__image {
+    height: 160px;
+  }
+  
+  .brand {
+    font-size: 18px;
+  }
+  
+  .toolbar .title {
+    font-size: 24px;
+  }
+}
