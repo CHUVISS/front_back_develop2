@@ -1,0 +1,188 @@
+# Зависимости
+/node_modules
+/.pnp
+.pnp.js
+.pnp.debug.js
+/yarn-error.log
+
+# Сборка
+/dist
+/build
+/out
+/.next
+
+# Тестирование
+/coverage
+/.nyc_output
+/junit.xml
+
+# Локальные файлы окружения
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE и редакторы
+/.vscode
+/.idea
+/*.swp
+/*.swo
+/*.swn
+/.DS_Store
+/Thumbs.db
+/.vs
+
+# Логи
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Временные файлы
+/tmp
+/temp
+/*.tmp
+/*.temp
+
+# Бэкапы
+/*.backup
+/*.bak
+
+# Кэш
+/.cache
+/.eslintcache
+/.stylelintcache
+/.parcel-cache
+/.vite_cache
+
+# Dotenv environment variables file
+.env
+.env.test
+.env.production
+
+# Результаты тестов
+/coverage
+/.nyc_output
+
+# Директории зависимостей
+node_modules
+jspm_packages
+
+# Директории сборки
+dist
+build
+out
+.next
+.nuxt
+
+# Файлы, специфичные для ОС
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Файлы для Firebase
+.firebase
+*.runtimeconfig.json
+
+# Файлы для Vercel
+.vercel
+
+# Файлы для Netlify
+.netlify
+
+# Файлы для CircleCI
+.circleci/*
+
+# Файлы для GitHub Actions
+.github/*
+
+# Secrets файлы
+*.pem
+*.key
+*.crt
+secrets/
+private/
+
+# package-lock.json обычно включается в репозиторий, 
+# но если нужно исключить, раскомментируйте следующую строку
+# package-lock.json
+
+# Логи приложения
+*.log
+logs
+*.log.*
+
+# Директории для загрузок
+uploads
+public/uploads
+static/uploads
+
+# Директории с медиа-файлами
+public/images/optimized
+public/images/cache
+
+# Конфигурационные файлы (если они содержат секреты)
+config/local.json
+config/development.json
+config/production.local.json
+
+# Файлы с метаданными
+.DS_Store
+desktop.ini
+ehthumbs.db
+Thumbs.db
+*.db
+*.sqlite
+*.sqlite3
+
+# Файлы документации (если генерируются автоматически)
+/apidoc
+/docs/_build
+/docs/build
+
+# Файлы для Docker
+.dockerignore
+docker-compose.override.yml
+Dockerfile.dev
+
+# Файлы для Kubernetes
+k8s/overlays/production/
+k8s/secrets/
+
+# Результаты аудита безопасности
+npm-audit.json
+yarn-audit.json
+
+# Результаты линтеров
+eslint-report.json
+stylelint-report.json
+
+# Тестовые артефакты
+test-results/
+test-reports/
+junit.xml
+coverage/
+
+# Профилирование
+profile/
+*.cpuprofile
+*.heapprofile
+
+# Архивы
+*.tar
+*.gz
+*.zip
+*.rar
+*.7z
+
+# Временные файлы редакторов
+*~
+~*.tmp
+*.pid
+*.seed
+*.pid.lock
