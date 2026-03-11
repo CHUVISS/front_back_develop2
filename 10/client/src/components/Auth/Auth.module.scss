@@ -1,0 +1,114 @@
+$primary: #2563eb;
+$primary-hover: #1d4ed8;
+$error: #ef4444;
+$text: #1e293b;
+$text-light: #64748b;
+$border: #e2e8f0;
+$background: #ffffff;
+$radius: 8px;
+
+.authContainer {
+  max-width: 420px;
+  margin: 60px auto;
+  padding: 48px;
+  background: $background;
+  border-radius: $radius;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+
+  h2 {
+    margin: 0 0 30px;
+    font-size: 28px;
+    font-weight: 700;
+    color: $text;
+    text-align: center;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  label {
+    font-size: 14px;
+    font-weight: 600;
+    color: $text;
+  }
+
+  input {
+    padding: 12px 16px;
+    border: 1px solid $border;
+    border-radius: $radius;
+    font-size: 15px;
+    transition: all 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: $primary;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    &:disabled {
+      background: #f1f5f9;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.error {
+  background: #fee2e2;
+  color: $error;
+  padding: 12px;
+  border-radius: $radius;
+  margin-bottom: 20px;
+  font-size: 14px;
+  border: 1px solid #fecaca;
+}
+
+.submitButton {
+  padding: 16px 24px;
+  background: $primary;
+  color: white;
+  border: none;
+  border-radius: $radius;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    background: $primary-hover;
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+  }
+}
+
+.links {
+  margin-top: 24px;
+  text-align: center;
+
+  a {
+    color: $primary;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
