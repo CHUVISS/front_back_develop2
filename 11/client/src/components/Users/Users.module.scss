@@ -1,0 +1,288 @@
+$primary: #2563eb;
+$success: #22c55e;
+$warning: #f59e0b;
+$danger: #ef4444;
+$purple: #7c3aed;
+$text-primary: #1e293b;
+$text-secondary: #64748b;
+$background: #ffffff;
+$border: #e2e8f0;
+$radius: 12px;
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  min-height: calc(100vh - 80px);
+  background: var(--color-bg-secondary, #f8fafc);
+  transition: background-color 0.3s ease;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-text-primary, $text-primary);
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.backLink {
+  color: var(--color-text-secondary, $text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--color-primary, $primary);
+  }
+}
+
+.error {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--color-danger, $danger);
+  padding: 16px;
+  border-radius: $radius;
+  margin-bottom: 20px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.success {
+  background: rgba(34, 197, 94, 0.1);
+  color: var(--color-success, $success);
+  padding: 16px;
+  border-radius: $radius;
+  margin-bottom: 20px;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.tableWrapper {
+  background: var(--color-bg-primary, $background);
+  border-radius: $radius;
+  box-shadow: var(--shadow, 0 4px 6px rgba(0, 0, 0, 0.1));
+  overflow: hidden;
+  margin-bottom: 32px;
+  border: 1px solid var(--color-border, $border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th, td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border, $border);
+    color: var(--color-text-primary, $text-primary);
+    transition: color 0.3s ease, border-color 0.3s ease;
+  }
+
+  th {
+    background: var(--color-bg-tertiary, #f1f5f9);
+    font-weight: 600;
+    color: var(--color-text-secondary, $text-secondary);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  tr {
+    transition: background 0.2s;
+
+    &:hover {
+      background: var(--color-bg-secondary, #f8fafc);
+    }
+
+    &.blockedRow {
+      background: rgba(239, 68, 68, 0.05);
+      opacity: 0.7;
+    }
+  }
+}
+
+.nameInputs {
+  display: flex;
+  gap: 8px;
+
+  input {
+    width: 100px;
+    padding: 6px 10px;
+    border: 1px solid var(--color-border, $border);
+    border-radius: 6px;
+    font-size: 14px;
+    background: var(--color-bg-primary, $background);
+    color: var(--color-text-primary, $text-primary);
+  }
+}
+
+.roleBadge {
+  padding: 4px 12px;
+  border-radius: 16px;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.statusBadge {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  display: inline-block;
+
+  &.statusActive {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--color-success, $success);
+  }
+
+  &.statusBlocked {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--color-danger, $danger);
+  }
+}
+
+.blockToggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--color-text-secondary, $text-secondary);
+  cursor: pointer;
+
+  input {
+    cursor: pointer;
+  }
+}
+
+.editBtn,
+.blockBtn,
+.deleteBtn,
+.saveBtn,
+.cancelBtn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-right: 6px;
+  transition: all 0.2s;
+  background: transparent;
+  font-weight: 500;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.editBtn {
+  background: var(--color-bg-tertiary, #f1f5f9);
+  color: var(--color-text-primary, $text-primary);
+
+  &:hover {
+    background: var(--color-border, $border);
+  }
+}
+
+.blockBtn {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--color-warning, $warning);
+
+  &:hover {
+    background: rgba(245, 158, 11, 0.2);
+  }
+}
+
+.deleteBtn {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--color-danger, $danger);
+
+  &:hover {
+    background: rgba(239, 68, 68, 0.2);
+  }
+}
+
+.saveBtn {
+  background: rgba(34, 197, 94, 0.1);
+  color: var(--color-success, $success);
+
+  &:hover {
+    background: rgba(34, 197, 94, 0.2);
+  }
+}
+
+.cancelBtn {
+  background: var(--color-bg-tertiary, #f1f5f9);
+  color: var(--color-text-secondary, $text-secondary);
+
+  &:hover {
+    background: var(--color-border, $border);
+  }
+}
+
+select, input {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border, $border);
+  border-radius: 6px;
+  font-size: 14px;
+  background: var(--color-bg-primary, $background);
+  color: var(--color-text-primary, $text-primary);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.statItem {
+  background: var(--color-bg-primary, $background);
+  padding: 20px;
+  border-radius: $radius;
+  box-shadow: var(--shadow, 0 2px 4px rgba(0, 0, 0, 0.1));
+  text-align: center;
+  border: 1px solid var(--color-border, $border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.statValue {
+  display: block;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-primary, $primary);
+  margin-bottom: 4px;
+}
+
+.statLabel {
+  font-size: 14px;
+  color: var(--color-text-secondary, $text-secondary);
+}
+
+@media (max-width: 768px) {
+  .tableWrapper {
+    overflow-x: auto;
+  }
+
+  .table {
+    min-width: 800px;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

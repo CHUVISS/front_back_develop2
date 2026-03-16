@@ -1,0 +1,278 @@
+.navbar {
+  background: var(--color-bg-primary, #ffffff);
+  box-shadow: var(--shadow, 0 2px 8px rgba(0, 0, 0, 0.1));
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid var(--color-border, #e2e8f0);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-primary, #2563eb);
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.logoIcon {
+  font-size: 28px;
+}
+
+.logoText {
+  background: linear-gradient(135deg, var(--color-primary, #2563eb) 0%, var(--color-purple, #7c3aed) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: var(--color-bg-secondary, #f8fafc);
+  border-radius: 20px;
+  margin-right: 8px;
+  border: 1px solid var(--color-border, #e2e8f0);
+}
+
+.userName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary, #1e293b);
+  white-space: nowrap;
+}
+
+.roleBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: white;
+  box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05));
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+}
+
+.roleIcon {
+  font-size: 14px;
+}
+
+.roleLabel {
+  white-space: nowrap;
+}
+
+.roleAdmin {
+  background: linear-gradient(135deg, var(--color-purple, #7c3aed) 0%, #a855f7 100%);
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
+}
+
+.roleSeller {
+  background: linear-gradient(135deg, var(--color-primary, #2563eb) 0%, #3b82f6 100%);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+}
+
+.roleUser {
+  background: linear-gradient(135deg, var(--color-text-secondary, #64748b) 0%, #94a3b8 100%);
+  box-shadow: 0 2px 8px rgba(100, 116, 139, 0.3);
+}
+
+.navLink {
+  text-decoration: none;
+  color: var(--color-text-secondary, #64748b);
+  font-size: 15px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  &:hover {
+    color: var(--color-primary, #2563eb);
+    background: var(--color-bg-secondary, #f8fafc);
+  }
+
+  &.active {
+    color: var(--color-primary, #2563eb);
+    background: rgba(37, 99, 235, 0.1);
+  }
+
+  &.adminLink {
+    color: var(--color-purple, #7c3aed);
+    
+    &:hover {
+      background: rgba(124, 58, 237, 0.1);
+    }
+  }
+}
+
+.loginLink {
+  color: var(--color-text-primary, #1e293b);
+  
+  &:hover {
+    color: var(--color-primary, #2563eb);
+  }
+}
+
+.registerLink {
+  background: linear-gradient(135deg, var(--color-primary, #2563eb) 0%, var(--color-primary-hover, #1d4ed8) 100%);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+
+  &:hover {
+    background: linear-gradient(135deg, var(--color-primary-hover, #1d4ed8) 0%, #1e40af 100%);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+  }
+}
+
+.cartBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, var(--color-success, #22c55e) 0%, #16a34a 100%);
+  color: white;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
+}
+
+.cartCount {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+.logoutBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, var(--color-danger, #ef4444) 0%, #dc2626 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
+
+  &:hover {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Адаптивность для тёмной темы
+@media (max-width: 1024px) {
+  .container {
+    padding: 12px 16px;
+  }
+
+  .menu {
+    gap: 12px;
+  }
+
+  .userName {
+    display: none;
+  }
+
+  .navLink:not(.registerLink) {
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 10px 12px;
+  }
+
+  .logo {
+    font-size: 20px;
+    gap: 8px;
+  }
+
+  .logoIcon {
+    font-size: 24px;
+  }
+
+  .menu {
+    gap: 8px;
+  }
+
+  .roleBadge {
+    padding: 3px 8px;
+    font-size: 10px;
+  }
+
+  .roleLabel {
+    display: none;
+  }
+
+  .roleIcon {
+    font-size: 14px;
+  }
+
+  .navLink {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+
+  .registerLink {
+    padding: 8px 14px;
+  }
+
+  .logoutBtn {
+    padding: 8px 14px;
+  }
+
+  .cartBadge {
+    padding: 6px 10px;
+  }
+}
