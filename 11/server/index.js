@@ -35,7 +35,6 @@ const products = [
 
 const refreshTokens = new Set();
 
-// Генерация токенов с ролью
 function generateAccessToken(user) {
   return jwt.sign(
     { 

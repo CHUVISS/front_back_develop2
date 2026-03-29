@@ -8,8 +8,10 @@ const app = express();
 app.use(express.json());
 
 const PORT = 3000;
-const JWT_SECRET = "access_secret";
+const ACCESS_SECRET = "access_secret";
+const REFRESH_SECRET = "refresh_secret";
 const ACCESS_EXPIRES_IN = "15m";
+const REFRESH_EXPIRES_IN = "7d";
 
 const users = [];
 const products = [
@@ -81,7 +83,7 @@ function authMiddleware(req, res, next) {
     }
 
     try {
-        const payload = jwt.verify(token, JWT_SECRET);
+        const payload = jwt.verify(token, ACCESS_SECRET);
         req.user = payload;
         next();
     } catch (err) {
@@ -176,10 +178,16 @@ app.post("/api/auth/login", async (req, res) => {
     }
     const accessToken = jwt.sign(
         { sub: user.id, username: user.username },
-        JWT_SECRET,
+        ACCESS_SECRET,
         { expiresIn: ACCESS_EXPIRES_IN }
     );
-    res.json({ accessToken });
+
+    const refreshToken = jwt.sign(
+        { sub: user.id },
+        REFRESH_SECRET,
+        { expiresIn: REFRESH_EXPIRES_IN }
+    );
+    res.json({ accessToken, refreshToken });
 });
 
 /**
