@@ -1,0 +1,17 @@
+{
+  "name": "tasks-pwa",
+  "version": "1.0.0",
+  "description": "PWA приложение для управления задачами с WebSocket и Push-уведомлениями",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "generate-keys": "npx web-push generate-vapid-keys"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.22.1",
+    "socket.io": "^4.6.1",
+    "web-push": "^3.6.6"
+  }
+}

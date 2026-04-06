@@ -1,0 +1,21 @@
+<div class="home-content">
+  <h2 class="is-center" style="margin-bottom: 1rem;">Добавить заметку</h2>
+  <form id="note-form" class="row is-center" style="gap: 0.5rem; margin-bottom: 2rem;">
+    <input
+      class="col-9"
+      type="text"
+      id="note-input"
+      placeholder="Введите текст заметки"
+      required
+      style="padding: 0.5rem 0.75rem; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem;"
+    >
+    <button class="col-3 button primary" type="submit" style="border-radius: 6px;">Добавить</button>
+  </form>
+
+  <h2 class="is-center" style="margin-bottom: 1rem;">Список заметок</h2>
+  <ul id="notes-list" style="list-style: none; padding-left: 0;"></ul>
+
+  <p id="empty-msg" class="is-center" style="color: #888; display: none;">
+    Заметок пока нет. Добавьте первую!
+  </p>
+</div>

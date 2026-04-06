@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>О приложении — Заметки PWA</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    .about-wrap { margin-top: 24px; display: flex; flex-direction: column; gap: 16px; }
+    .about-hero {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      text-align: center;
+      transition: box-shadow var(--transition);
+    }
+    .about-hero:hover { box-shadow: var(--shadow-hover); }
+    .about-hero h2 { font-size: 22px; margin-bottom: 6px; }
+    .about-version { color: var(--text-muted); font-size: 13px; }
+    
+    .about-features { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .about-features li {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      transition: box-shadow var(--transition);
+    }
+    .about-features li:hover { box-shadow: var(--shadow-hover); }
+    .about-features span { font-size: 15px; color: var(--text); line-height: 1.5; }
+
+    .about-tech {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .about-tech h3 { font-size: 16px; margin-bottom: 12px; }
+    .tech-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tech-tag {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <header>
+      <div class="logo">Заметки <span>PWA</span></div>
+      
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <div id="status-badge" class="online">
+          <span class="dot"></span>
+          <span id="status-text">Онлайн</span>
+        </div>
+        
+        <!-- Ссылка обратно на главную -->
+        <a href="index.html" style="color: var(--text-muted); text-decoration: none; font-size: 13px; font-weight: 500; transition: color var(--transition);">Домой</a>
+      </div>
+    </header>
+
+    <div class="about-wrap">
+      <div class="about-hero">
+        <h2>📝 О приложении</h2>
+        <p class="about-version">Версия 1.2.3</p>
+      </div>
+
+      <ul class="about-features">
+        <li><span>📝 Заметки — это прогрессивное веб-приложение (PWA) для управления задачами.</span></li>
+        <li><span>⚡ Работает офлайн благодаря Service Worker и Cache API.</span></li>
+        <li><span>🏗 Использует архитектуру App Shell — каркас загружается мгновенно из кэша.</span></li>
+        <li><span>💾 Данные сохраняются в localStorage и остаются доступны даже без сети.</span></li>
+        <li><span>🔒 Работает по HTTPS с локальным доверенным сертификатом (mkcert).</span></li>
+      </ul>
+
+      <div class="about-tech">
+        <h3>🛠 Технологии</h3>
+        <div class="tech-tags">
+          <span class="tech-tag">HTML / CSS </span>
+          <span class="tech-tag">Service Worker</span>
+          <span class="tech-tag">Web App Manifest</span>
+          <span class="tech-tag">localStorage</span>
+          <span class="tech-tag">HTTPS</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="sw-toast"></div>
+  <script>
+    // Минимальный скрипт только для статуса сети и регистрации SW (без нагрузки от app.js)
+    const $ = id => document.getElementById(id);
+    function updateStatus() {
+      const badge = $('status-badge');
+      const text = $('status-text');
+      if (navigator.onLine) { badge.className = 'online'; text.textContent = 'Онлайн'; }
+      else { badge.className = 'offline'; text.textContent = 'Офлайн'; }
+    }
+    window.addEventListener('online', updateStatus);
+    window.addEventListener('offline', updateStatus);
+    updateStatus();
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(console.error));
+    }
+  </script>
+</body>
+</html>

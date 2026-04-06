@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Заметки PWA</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <div class="layout">
+    <header>
+      <div class="logo">Заметки <span>PWA</span></div>
+
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <div id="status-badge" class="online">
+          <span class="dot"></span>
+          <span id="status-text">Онлайн</span>
+        </div>
+
+        <a id="nav-link" href="#"
+           style="color: var(--text-muted); text-decoration: none; font-size: 13px;
+                  font-weight: 500; transition: color var(--transition);">О нас</a>
+      </div>
+    </header>
+
+    <!-- Главная -->
+    <div id="view-home">
+      <div class="stats">
+        <div class="stat">
+          <div id="stat-total"  class="stat-value">0</div>
+          <div class="stat-label">Всего</div>
+        </div>
+        <div class="stat">
+          <div id="stat-active" class="stat-value">0</div>
+          <div class="stat-label">Активных</div>
+        </div>
+        <div class="stat">
+          <div id="stat-done"   class="stat-value">0</div>
+          <div class="stat-label">Выполнено</div>
+        </div>
+      </div>
+
+      <div class="add-form">
+        <input type="text" id="task-input" placeholder="Введите задачу..." autocomplete="off">
+        <button id="add-btn">Добавить</button>
+      </div>
+
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all">Все</button>
+        <button class="filter-btn" data-filter="active">Активные</button>
+        <button class="filter-btn" data-filter="done">Выполненные</button>
+      </div>
+
+      <ul id="task-list"></ul>
+
+      <div class="actions-bar">
+        <span id="left-count">Активных: 0</span>
+        <button id="clear-done" class="clear-btn">Очистить выполненные</button>
+      </div>
+
+      <!-- Push-кнопки -->
+      <footer class="push-footer">
+        <button id="enable-push"  class="push-btn push-btn--on">🔔 Включить уведомления</button>
+        <button id="disable-push" class="push-btn push-btn--off" style="display:none;">🔕 Отключить уведомления</button>
+      </footer>
+    </div>
+
+    <!-- О нас -->
+    <div id="view-about" style="display: none;">
+      <div class="about-wrap">
+        <div class="about-hero">
+          <h2>📝 О приложении</h2>
+          <p class="about-version">Версия 1.2.3</p>
+        </div>
+
+        <ul class="about-features">
+          <li><span>📝 Прогрессивное веб-приложение (PWA) для управления задачами.</span></li>
+          <li><span>⚡ Работает офлайн благодаря Service Worker и Cache API.</span></li>
+          <li><span>🔄 Синхронизация в реальном времени через WebSocket (Socket.IO).</span></li>
+          <li><span>🔔 Push-уведомления о новых задачах даже при закрытой вкладке.</span></li>
+          <li><span>💾 Данные сохраняются в localStorage и доступны без сети.</span></li>
+        </ul>
+
+        <div class="about-tech">
+          <h3>🛠 Технологии</h3>
+          <div class="tech-tags">
+            <span class="tech-tag">HTML / CSS </span>
+            <span class="tech-tag">Service Worker</span>
+            <span class="tech-tag">Web App Manifest</span>
+            <span class="tech-tag">Socket.IO</span>
+            <span class="tech-tag">Web Push API</span>
+            <span class="tech-tag">localStorage</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="sw-toast"></div>
+
+  <!-- Socket.IO клиентская библиотека (раздаётся Express автоматически) -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

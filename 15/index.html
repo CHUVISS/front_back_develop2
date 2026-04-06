@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Заметки PWA</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <div class="layout">
+    <header>
+      <div class="logo">Заметки <span>PWA</span></div>
+      
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <div id="status-badge" class="online">
+          <span class="dot"></span>
+          <span id="status-text">Онлайн</span>
+        </div>
+        
+        <!-- Ссылка на страницу "О нас" -->
+        <a href="content/about.html" style="color: var(--text-muted); text-decoration: none; font-size: 13px; font-weight: 500; transition: color var(--transition);">О нас</a>
+      </div>
+    </header>
+
+    <div class="stats">
+      <div class="stat"><div id="stat-total" class="stat-value">0</div><div class="stat-label">Всего</div></div>
+      <div class="stat"><div id="stat-active" class="stat-value">0</div><div class="stat-label">Активных</div></div>
+      <div class="stat"><div id="stat-done" class="stat-value">0</div><div class="stat-label">Выполнено</div></div>
+    </div>
+
+    <div class="add-form">
+      <input type="text" id="task-input" placeholder="Введите задачу..." autocomplete="off">
+      <button id="add-btn">Добавить</button>
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">Все</button>
+      <button class="filter-btn" data-filter="active">Активные</button>
+      <button class="filter-btn" data-filter="done">Выполненные</button>
+    </div>
+
+    <ul id="task-list"></ul>
+
+    <div class="actions-bar">
+      <span id="left-count">Активных: 0</span>
+      <button id="clear-done" class="clear-btn">Очистить выполненные</button>
+    </div>
+  </div>
+
+  <div id="sw-toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
