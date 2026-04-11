@@ -1,4 +1,3 @@
-// ─── ИЗМЕНЕНИЕ: версия кеша обновлена до v5 — принудительная переустановка SW ───
 const CACHE_NAME = 'tasks-app-v5';
 const STATIC_ASSETS = [
   '/',
@@ -45,7 +44,7 @@ self.addEventListener('fetch', event => {
   if (url.pathname.startsWith('/socket.io') ||
       url.pathname === '/subscribe' ||
       url.pathname === '/unsubscribe' ||
-      url.pathname === '/snooze') return; // ─── ИЗМЕНЕНИЕ: исключаем /snooze из кеша (Шаг 1.3) ───
+      url.pathname === '/snooze') return;
 
   event.respondWith(
     caches.match(event.request).then(cached => {
@@ -64,10 +63,9 @@ self.addEventListener('fetch', event => {
   );
 });
 
-// ─── Push-уведомления ────────────────────────────────────────────────────────
-// ─── ИЗМЕНЕНИЕ: обновлён обработчик push — добавлен reminderId и кнопка «Отложить» (Шаг 1.3) ───
+// Push-уведомления
 self.addEventListener('push', event => {
-  // ИЗМЕНЕНИЕ: инициализируем reminderId как null по умолчанию
+  // инициализируем reminderId как null по умолчанию
   let data = { title: 'Новое уведомление', body: '', reminderId: null };
   if (event.data) {
     try { data = event.data.json(); } catch (e) { data.body = event.data.text(); }
@@ -78,11 +76,11 @@ self.addEventListener('push', event => {
     icon:    '/icons/favicon-192x192.png',
     badge:   '/icons/favicon-32x32.png',
     vibrate: [200, 100, 200],
-    // ИЗМЕНЕНИЕ: передаём reminderId в data уведомления для использования в notificationclick
+    // передаём reminderId в data уведомления для использования в notificationclick
     data:    { url: '/', reminderId: data.reminderId },
   };
 
-  // ИЗМЕНЕНИЕ: кнопку «Отложить на 5 минут» добавляем только для напоминаний (если есть reminderId)
+  // кнопку «Отложить на 5 минут» добавляем только для напоминаний (если есть reminderId)
   if (data.reminderId) {
     options.actions = [
       { action: 'snooze',  title: 'Отложить на 5 минут' },
@@ -99,14 +97,12 @@ self.addEventListener('push', event => {
     self.registration.showNotification(data.title, options)
   );
 });
-// ─── КОНЕЦ ИЗМЕНЕНИЯ ───
 
-// ─── ИЗМЕНЕНИЕ: обновлён notificationclick — добавлена обработка действия snooze (Шаг 1.3) ───
 self.addEventListener('notificationclick', event => {
   const notification = event.notification;
   const action       = event.action;
 
-  // ИЗМЕНЕНИЕ: обработка кнопки «Отложить на 5 минут»
+  // обработка кнопки «Отложить на 5 минут»
   if (action === 'snooze') {
     const reminderId = notification.data && notification.data.reminderId;
     event.waitUntil(
@@ -120,13 +116,11 @@ self.addEventListener('notificationclick', event => {
     return;
   }
 
-  // ИЗМЕНЕНИЕ: кнопка «Закрыть» — просто закрываем уведомление
   if (action === 'dismiss') {
     notification.close();
     return;
   }
 
-  // При клике на само уведомление или кнопку «Открыть» — открываем/фокусируем вкладку
   notification.close();
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
@@ -136,7 +130,6 @@ self.addEventListener('notificationclick', event => {
     })
   );
 });
-// ─── КОНЕЦ ИЗМЕНЕНИЯ ───
 
 // Сообщения от клиента
 self.addEventListener('message', event => {

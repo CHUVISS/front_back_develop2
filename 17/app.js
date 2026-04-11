@@ -1,4 +1,3 @@
-// ─── Утилиты ─────────────────────────────────────────────────────────────────
 const $ = id => document.getElementById(id);
 
 const saveTasks = tasks => localStorage.setItem('sw_tasks', JSON.stringify(tasks));
@@ -16,12 +15,10 @@ const formatDate = ts => {
 const escapeHTML = str =>
   str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-// ─── Состояние ───────────────────────────────────────────────────────────────
 let tasks  = loadTasks();
 let filter = 'all';
 
-// ─── Socket.IO ───────────────────────────────────────────────────────────────
-// подключается к тому же origin, что и страница (раздаётся Express)
+// Socket.IO
 const socket = io();
 
 socket.on('taskAdded', (task) => {
@@ -29,19 +26,15 @@ socket.on('taskAdded', (task) => {
   showWsNotification('Новая задача: ' + task.text, null);
 });
 
-// ─── ИЗМЕНЕНИЕ: WS-событие о сработавшем напоминании — обходное решение для Safari ───
-// Safari не поддерживает кнопки actions в push-уведомлениях (только Chromium).
-// Сервер рассылает reminderFired через WebSocket — показываем баннер со кнопкой «Отложить».
 socket.on('reminderFired', (reminder) => {
   console.log('[WS] Напоминание сработало:', reminder.text);
   showWsNotification('⏰ ' + reminder.text, reminder.id);
 });
-// ─── КОНЕЦ ИЗМЕНЕНИЯ ───
 
 socket.on('connect',    () => console.log('[WS] Подключён:', socket.id));
 socket.on('disconnect', () => console.log('[WS] Отключён'));
 
-// ─── SPA-навигация ───────────────────────────────────────────────────────────
+// SPA-навигация
 let currentView = 'home';
 
 function showView(view) {
@@ -63,7 +56,7 @@ $('nav-link').addEventListener('click', e => {
   showView(currentView === 'home' ? 'about' : 'home');
 });
 
-// ─── Рендер ──────────────────────────────────────────────────────────────────
+// Рендер
 function render() {
   const list    = $('task-list');
   const visible = tasks.filter(t => {
@@ -98,11 +91,9 @@ function render() {
   }
 
   list.innerHTML = visible.map(t => {
-    // ─── ИЗМЕНЕНИЕ: отображение метки напоминания в карточке задачи (Шаг 1.2) ───
     const reminderBadge = t.reminder
       ? '<span class="task-date" style="color:#f59e0b;">⏰ ' + formatDate(t.reminder) + '</span>'
       : '';
-    // ─── КОНЕЦ ИЗМЕНЕНИЯ ───
 
     return '<li class="task-item ' + (t.done ? 'done' : '') + '" data-id="' + t.id + '">' +
       '<div class="task-checkbox" data-action="toggle">' +
@@ -122,21 +113,18 @@ function render() {
   }).join('');
 }
 
-// ─── CRUD ─────────────────────────────────────────────────────────────────────
+// CRUD
 function addTask(text) {
   if (!text.trim()) return;
   const task = { id: Date.now(), text: text.trim(), done: false, createdAt: Date.now() };
   tasks.unshift(task);
   saveTasks(tasks);
   render();
-  // Отправляем событие на сервер; сервер рассылает taskAdded всем клиентам
   socket.emit('newTask', { text: task.text, timestamp: task.createdAt });
 }
 
-// ─── ИЗМЕНЕНИЕ: новая функция добавления заметки с напоминанием (Шаг 1.2) ───
 function addTaskWithReminder(text, reminderTimestamp) {
   if (!text.trim()) return;
-  // ИЗМЕНЕНИЕ: структура задачи теперь содержит уникальный id и поле reminder
   const task = {
     id: Date.now(),
     text: text.trim(),
@@ -147,14 +135,12 @@ function addTaskWithReminder(text, reminderTimestamp) {
   tasks.unshift(task);
   saveTasks(tasks);
   render();
-  // ИЗМЕНЕНИЕ: отправляем событие newReminder вместо newTask
   socket.emit('newReminder', {
     id: task.id,
     text: task.text,
     reminderTime: reminderTimestamp
   });
 }
-// ─── КОНЕЦ ИЗМЕНЕНИЯ ───
 
 function toggleTask(id) {
   const t = tasks.find(t => t.id === id);
@@ -173,7 +159,7 @@ function clearDone() {
   render();
 }
 
-// ─── UI-обработчики ───────────────────────────────────────────────────────────
+// UI-обработчики
 $('add-btn').addEventListener('click', () => {
   const input = $('task-input');
   addTask(input.value);
@@ -205,8 +191,6 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
   });
 });
 
-// ─── ИЗМЕНЕНИЕ: обработчик кнопки «Добавить с напоминанием» (Шаг 1.2) ──────
-// Привязан к кнопке #reminder-btn в index.html (не к форме, т.к. SPA без <form>)
 $('reminder-btn').addEventListener('click', () => {
   const text     = $('reminder-text').value.trim();
   const datetime = $('reminder-time').value;
@@ -231,9 +215,8 @@ $('reminder-btn').addEventListener('click', () => {
   $('reminder-time').value = '';
   $('reminder-text').focus();
 });
-// ─── КОНЕЦ ИЗМЕНЕНИЯ ───
 
-// ─── Статус сети ──────────────────────────────────────────────────────────────
+// Статус сети
 function updateStatus() {
   const badge = $('status-badge');
   const text  = $('status-text');
@@ -249,8 +232,7 @@ window.addEventListener('online',  updateStatus);
 window.addEventListener('offline', updateStatus);
 updateStatus();
 
-// ─── Push-уведомления ─────────────────────────────────────────────────────────
-// Должен совпадать с vapidKeys.publicKey в server.js
+// Push-уведомления
 var VAPID_PUBLIC_KEY = 'BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U';
 
 function urlBase64ToUint8Array(base64String) {
@@ -296,7 +278,7 @@ async function unsubscribeFromPush() {
   }
 }
 
-// ─── Service Worker + кнопки уведомлений ─────────────────────────────────────
+// Service Worker + кнопки уведомлений
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
     try {
@@ -350,7 +332,7 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// ─── Toast ────────────────────────────────────────────────────────────────────
+// Toast
 function showToast(msg) {
   var toast      = $('sw-toast');
   toast.textContent = msg;
@@ -358,10 +340,6 @@ function showToast(msg) {
   setTimeout(() => toast.classList.remove('show'), 3500);
 }
 
-// ─── ИЗМЕНЕНИЕ: баннер с опциональной кнопкой «Отложить на 5 минут» ───────
-// reminderId передаётся только для напоминаний; для обычных задач — null.
-// Это обходное решение ограничения Safari: браузер игнорирует notification.actions
-// в push-уведомлениях — кнопки там не появляются. Баннер на странице работает везде.
 function showWsNotification(text, reminderId) {
   var note = document.createElement('div');
   note.style.cssText =
@@ -376,7 +354,7 @@ function showWsNotification(text, reminderId) {
   msg.textContent = text;
   note.appendChild(msg);
 
-  // ИЗМЕНЕНИЕ: кнопку «Отложить» показываем только для напоминаний
+  // кнопку «Отложить» показываем только для напоминаний
   if (reminderId) {
     var btn = document.createElement('button');
     btn.textContent = '⏸ Отложить на 5 минут';
@@ -396,7 +374,6 @@ function showWsNotification(text, reminderId) {
   // ИЗМЕНЕНИЕ: для напоминаний даём больше времени на реакцию (10 сек)
   setTimeout(() => { if (note.parentNode) note.remove(); }, reminderId ? 10000 : 3500);
 }
-// ─── КОНЕЦ ИЗМЕНЕНИЯ ───
 
-// ─── Запуск ───────────────────────────────────────────────────────────────────
+// Запуск
 render();

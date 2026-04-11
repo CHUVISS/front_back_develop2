@@ -6,8 +6,6 @@
   <title>Заметки PWA</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="manifest" href="manifest.json">
-
-  <!-- ─── ИЗМЕНЕНИЕ: стили для компактной формы напоминания ─── -->
   <style>
     /* Одна строка, как у основной add-form */
     .reminder-form {
@@ -70,7 +68,6 @@
       text-transform: uppercase;
     }
   </style>
-  <!-- ─── КОНЕЦ ИЗМЕНЕНИЯ ─── -->
 </head>
 <body>
   <div class="layout">
@@ -106,13 +103,11 @@
         </div>
       </div>
 
-      <!-- Обычная форма добавления задачи (без изменений) -->
       <div class="add-form">
         <input type="text" id="task-input" placeholder="Введите задачу..." autocomplete="off">
         <button id="add-btn">Добавить</button>
       </div>
 
-      <!-- ─── ИЗМЕНЕНИЕ: форма добавления заметки с напоминанием (Шаг 1.1) ─── -->
       <p class="reminder-label">⏰ С напоминанием</p>
       <div class="reminder-form">
         <input
@@ -127,7 +122,6 @@
         >
         <button id="reminder-btn">⏰ Напомнить</button>
       </div>
-      <!-- ─── КОНЕЦ ИЗМЕНЕНИЯ ─── -->
 
       <div class="filters">
         <button class="filter-btn active" data-filter="all">Все</button>
@@ -163,9 +157,7 @@
           <li><span>🔄 Синхронизация в реальном времени через WebSocket (Socket.IO).</span></li>
           <li><span>🔔 Push-уведомления о новых задачах даже при закрытой вкладке.</span></li>
           <li><span>💾 Данные сохраняются в localStorage и доступны без сети.</span></li>
-          <!-- ─── ИЗМЕНЕНИЕ: добавлен пункт о напоминаниях ─── -->
           <li><span>⏰ Планирование напоминаний с кнопкой «Отложить на 5 минут».</span></li>
-          <!-- ─── КОНЕЦ ИЗМЕНЕНИЯ ─── -->
         </ul>
 
         <div class="about-tech">
@@ -185,7 +177,6 @@
 
   <div id="sw-toast"></div>
 
-  <!-- Socket.IO клиентская библиотека (раздаётся Express автоматически) -->
   <script src="/socket.io/socket.io.js"></script>
   <script src="app.js"></script>
 </body>
