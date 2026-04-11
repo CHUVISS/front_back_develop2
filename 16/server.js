@@ -6,9 +6,7 @@ const bodyParser = require('body-parser');
 const cors       = require('cors');
 const path       = require('path');
 
-// ─── VAPID-ключи ─────────────────────────────────────────────────────────────
-// Сгенерированы командой: npx web-push generate-vapid-keys
-// Замените на свои ключи, если хотите использовать собственный домен/email
+// VAPID-ключи
 const vapidKeys = {
   publicKey:  'BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U',
   privateKey: 'UUxI4O8-FbRouAevSmBQ6o18hgE4nSG3qwvJTfKc-ls'
@@ -29,20 +27,19 @@ const io     = socketIo(server, {
 app.use(cors());
 app.use(bodyParser.json());
 
-// Раздаём статику из текущей папки (рядом с server.js)
+// Раздаём статику из текущей папки
 app.use(express.static(path.join(__dirname, './')));
 
-// ─── Хранилище push-подписок (in-memory) ─────────────────────────────────────
+// Хранилище push-подписок
 let subscriptions = [];
 
-// ─── WebSocket ────────────────────────────────────────────────────────────────
+// WebSocket
 io.on('connection', (socket) => {
   console.log('[WS] Клиент подключён:', socket.id);
 
   socket.on('newTask', (task) => {
     console.log('[WS] Новая задача:', task.text);
 
-    // Рассылаем всем подключённым клиентам (включая отправителя)
     io.emit('taskAdded', task);
 
     // Push-уведомление всем подписанным
@@ -68,7 +65,7 @@ io.on('connection', (socket) => {
   });
 });
 
-// ─── REST-эндпоинты для подписок ─────────────────────────────────────────────
+// REST-эндпоинты для подписок
 app.post('/subscribe', (req, res) => {
   const sub = req.body;
   const exists = subscriptions.some(s => s.endpoint === sub.endpoint);
@@ -84,7 +81,7 @@ app.post('/unsubscribe', (req, res) => {
   res.status(200).json({ message: 'Подписка удалена' });
 });
 
-// ─── Запуск ───────────────────────────────────────────────────────────────────
+// Запуск
 const PORT = 3001;
 server.listen(PORT, () => {
   console.log(`✅ Сервер запущен: http://localhost:${PORT}`);
