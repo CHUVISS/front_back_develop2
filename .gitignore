@@ -186,3 +186,7 @@ profile/
 *.pid
 *.seed
 *.pid.lock
+
+node_modules/
+.env
+.DS_Store
