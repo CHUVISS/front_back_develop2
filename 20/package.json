@@ -1,0 +1,19 @@
+{
+  "name": "users-api",
+  "version": "1.0.0",
+  "description": "REST API для управления пользователями с MongoDB (Практическое занятие 20)",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1",
+    "mongoose": "^9.5.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
