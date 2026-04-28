@@ -1,0 +1,233 @@
+// Переменные
+$primary-color: #2563eb;
+$primary-hover: #1d4ed8;
+$success-color: #22c55e;
+$warning-color: #f59e0b;
+$danger-color: #ef4444;
+$purple-color: #7c3aed;
+
+$text-primary: #1e293b;
+$text-secondary: #64748b;
+$text-light: #94a3b8;
+
+$bg-primary: #ffffff;
+$bg-secondary: #f8fafc;
+$bg-tertiary: #f1f5f9;
+
+$border-color: #e2e8f0;
+$border-focus: #2563eb;
+
+$shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+$shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+$shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+$shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+
+$radius-sm: 8px;
+$radius: 12px;
+$radius-lg: 16px;
+
+// Контейнер
+.authContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+// Карточка
+.authCard {
+  width: 100%;
+  max-width: 420px;
+  background: var(--color-bg-primary, $bg-primary);
+  border-radius: $radius-lg;
+  box-shadow: $shadow-xl;
+  padding: 40px;
+  border: 1px solid var(--color-border, $border-color);
+  transition: all 0.3s ease;
+}
+
+// Заголовок
+.title {
+  margin: 0 0 32px;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-text-primary, $text-primary);
+  text-align: center;
+  letter-spacing: -0.5px;
+}
+
+// Форма
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+// Группа input
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+// Лейбл
+.label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary, $text-primary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.required {
+  color: var(--color-danger, $danger-color);
+}
+
+// Input
+.input {
+  padding: 12px 16px;
+  border: 1px solid var(--color-border, $border-color);
+  border-radius: $radius;
+  font-size: 15px;
+  background: var(--color-bg-secondary, $bg-secondary);
+  color: var(--color-text-primary, $text-primary);
+  transition: all 0.2s ease;
+  width: 100%;
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-primary, $border-focus);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    background: var(--color-bg-primary, $bg-primary);
+  }
+
+  &:disabled {
+    background: var(--color-bg-tertiary, $bg-tertiary);
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  &::placeholder {
+    color: var(--color-text-secondary, $text-secondary);
+  }
+}
+
+// Ошибка
+.error {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--color-danger, $danger-color);
+  padding: 12px 16px;
+  border-radius: $radius;
+  font-size: 14px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  &::before {
+    content: '⚠️';
+  }
+}
+
+// Кнопка
+.submitButton {
+  margin-top: 8px;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, var(--color-primary, $primary-color) 0%, var(--color-primary-hover, $primary-hover) 100%);
+  color: white;
+  border: none;
+  border-radius: $radius;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    background: var(--color-bg-tertiary, $bg-tertiary);
+    color: var(--color-text-secondary, $text-secondary);
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+}
+
+// Ссылки
+.links {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.loginLink {
+  color: var(--color-primary, $primary-color);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+
+  &:hover {
+    text-decoration: underline;
+    color: var(--color-primary-hover, $primary-hover);
+  }
+}
+
+// Адаптивность
+@media (max-width: 640px) {
+  .authCard {
+    padding: 32px 24px;
+  }
+
+  .title {
+    font-size: 28px;
+    margin-bottom: 24px;
+  }
+
+  .form {
+    gap: 16px;
+  }
+
+  .submitButton {
+    margin-top: 4px;
+  }
+}
+
+// Тёмная тема
+:global(.dark-theme) {
+  .authCard {
+    background: var(--color-bg-primary, #1e293b);
+    border-color: var(--color-border, #334155);
+  }
+
+  .title {
+    color: var(--color-text-primary, #f1f5f9);
+  }
+
+  .label {
+    color: var(--color-text-primary, #f1f5f9);
+  }
+
+  .input {
+    background: var(--color-bg-secondary, #0f172a);
+    border-color: var(--color-border, #334155);
+    color: var(--color-text-primary, #f1f5f9);
+
+    &:focus {
+      background: var(--color-bg-primary, #1e293b);
+    }
+
+    &:disabled {
+      background: var(--color-bg-tertiary, #334155);
+    }
+  }
+}

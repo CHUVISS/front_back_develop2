@@ -1,0 +1,72 @@
+.navbar {
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+    text-decoration: none;
+    
+    &:hover {
+      color: #3498db;
+    }
+  }
+
+  .navLinks {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+
+    a {
+      color: #2c3e50;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+
+      &:hover {
+        color: #3498db;
+      }
+    }
+
+    .username {
+      color: #7f8c8d;
+      font-size: 0.9rem;
+    }
+
+    .logoutButton {
+      background: none;
+      border: 1px solid #e74c3c;
+      color: #e74c3c;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s;
+
+      &:hover {
+        background: #e74c3c;
+        color: white;
+      }
+    }
+  }
+}
+
+.mainContent {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+  flex: 1;
+}
