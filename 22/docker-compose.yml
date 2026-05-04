@@ -5,7 +5,7 @@ services:
     working_dir: /app
     volumes:
       - ./backend:/app
-    command: node server.js
+    command: npm i && node server.js
     environment:
       - PORT=3000
     networks: [appnet]
@@ -15,7 +15,7 @@ services:
     working_dir: /app
     volumes:
       - ./backend:/app
-    command: node server.js
+    command: npm i && node server.js
     environment:
       - PORT=3001
     networks: [appnet]
