@@ -35,7 +35,7 @@ const ProductForm = () => {
     try {
       setFetching(true);
       const response = await productsApi.getById(id);
-      const product = response.data;
+      const product = response.data.data;
       
       setFormData({
         title: product.title || product.name || '',

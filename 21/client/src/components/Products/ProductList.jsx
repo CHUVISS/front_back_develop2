@@ -20,7 +20,7 @@ const ProductList = ({ onAddToCart }) => {
     try {
       setLoading(true);
       const response = await productsApi.getAll();
-      setProducts(response.data);
+      setProducts(response.data.data);
       setError('');
     } catch (err) {
       setError('Не удалось загрузить товары');

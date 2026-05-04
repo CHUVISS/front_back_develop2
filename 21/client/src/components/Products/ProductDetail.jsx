@@ -21,7 +21,7 @@ const ProductDetail = ({ onAddToCart }) => {
     try {
       setLoading(true);
       const response = await productsApi.getById(id);
-      setProduct(response.data);
+      setProduct(response.data.data);
       setError('');
     } catch (err) {
       console.error('Failed to load product:', err);

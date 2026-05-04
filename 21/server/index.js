@@ -46,7 +46,7 @@ redisClient.on("error", (err) => console.error("Redis error:", err));
 
 async function initRedis() {
   await redisClient.connect();
-  console.log("✅ Redis connected");
+  console.log("Redis connected");
 }
 
 // REDIS: Middleware для чтения из кэша
@@ -474,7 +474,7 @@ app.delete("/api/users/:id", authMiddleware, roleMiddleware(["admin"]), (req, re
   res.json({ message: "User deleted" });
 });
 
-// ==================== PRODUCTS ====================
+// PRODUCTS
 
 // REDIS: Добавлен cacheMiddleware для кэширования списка товаров (TTL: 600 сек)
 app.get("/api/products", 

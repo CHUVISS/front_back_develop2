@@ -27,7 +27,7 @@ const Users = () => {
     try {
       setLoading(true);
       const response = await api.get('/users');
-      setUsers(response.data);
+      setUsers(response.data.data);
       setError('');
     } catch (err) {
       setError('Не удалось загрузить пользователей');
