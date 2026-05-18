@@ -1,0 +1,105 @@
+# ══════════════════════════════════════════════
+# ПРИМЕРЫ ЗАПРОСОВ ДЛЯ APOLLO SANDBOX
+# Откройте http://localhost:4000 после запуска сервера
+# ══════════════════════════════════════════════
+
+
+# ── ЗАПРОС 1: Получить все книги с автором ──
+query GetAllBooks {
+  books {
+    id
+    title
+    year
+    genre
+    author {
+      name
+    }
+  }
+}
+
+
+# ── ЗАПРОС 2: Получить одну книгу по id ──
+query GetBook {
+  book(id: "1") {
+    id
+    title
+    year
+    genre
+    author {
+      id
+      name
+      bio
+    }
+  }
+}
+
+
+# ── ЗАПРОС 3: Получить всех авторов с их книгами ──
+query GetAuthorsWithBooks {
+  authors {
+    id
+    name
+    bio
+    books {
+      id
+      title
+      year
+    }
+  }
+}
+
+
+# ── ЗАПРОС 4: Создать нового автора ──
+mutation CreateAuthor {
+  createAuthor(input: {
+    name: "Антон Чехов"
+    bio: "Русский писатель, мастер короткого рассказа"
+  }) {
+    id
+    name
+    bio
+  }
+}
+
+
+# ── ЗАПРОС 5: Создать новую книгу ──
+# Сначала создайте автора (запрос 4), затем используйте его id
+mutation CreateBook {
+  createBook(input: {
+    title: "Вишнёвый сад"
+    year: 1904
+    genre: "Пьеса"
+    authorId: "4"
+  }) {
+    id
+    title
+    year
+    genre
+    author {
+      name
+    }
+  }
+}
+
+
+# ── ЗАПРОС 6: Создать книгу с переменными ──
+# В панели Variables вставьте:
+# {
+#   "input": {
+#     "title": "Три сестры",
+#     "year": 1901,
+#     "genre": "Пьеса",
+#     "authorId": "4"
+#   }
+# }
+mutation CreateBookWithVars($input: CreateBookInput!) {
+  createBook(input: $input) {
+    id
+    title
+    year
+    genre
+    author {
+      name
+    }
+  }
+}
