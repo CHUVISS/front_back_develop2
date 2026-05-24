@@ -1,0 +1,17 @@
+{
+  "name": "practice27-rabbitmq",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "setup": "node src/setup-queues.js",
+    "producer": "node src/producer.js",
+    "worker": "node src/worker.js",
+    "worker:1": "WORKER_ID=1 node src/worker.js",
+    "worker:2": "WORKER_ID=2 node src/worker.js",
+    "dlq-monitor": "node src/dlq-monitor.js"
+  },
+  "dependencies": {
+    "amqplib": "^0.10.4",
+    "express": "^4.19.2"
+  }
+}
