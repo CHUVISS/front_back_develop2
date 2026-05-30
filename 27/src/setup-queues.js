@@ -1,4 +1,5 @@
 import amqplib from 'amqplib';
+import { fileURLToPath } from 'url';
 
 const RABBITMQ_URL = process.env.RABBITMQ_URL || 'amqp://localhost';
 
@@ -42,4 +43,6 @@ async function setupQueues() {
   console.log('\nНастройка завершена. Теперь запустите воркеры и продюсер.');
 }
 
-await setupQueues();
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  await setupQueues();
+}

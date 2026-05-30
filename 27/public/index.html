@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RabbitMQ Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1a1d2e 0%, #16213e 100%);
+      border-bottom: 1px solid #2d3748;
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo {
+      width: 44px; height: 44px;
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -0.5px;
+    }
+
+    header h1 { font-size: 22px; font-weight: 700; color: #f7fafc; }
+    header p  { font-size: 13px; color: #718096; margin-top: 2px; }
+
+    .badge {
+      margin-left: auto;
+      background: #1a2e1a;
+      border: 1px solid #276227;
+      color: #68d391;
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    .badge::before {
+      content: '';
+      width: 7px; height: 7px;
+      background: #68d391;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 32px; }
+
+    .arch {
+      background: #1a1d2e;
+      border: 1px solid #2d3748;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 28px;
+      text-align: center;
+    }
+
+    .arch h2 { font-size: 13px; color: #718096; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; }
+
+    .arch-flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: wrap;
+      row-gap: 12px;
+    }
+
+    .arch-node {
+      background: #0f1117;
+      border: 1px solid #2d3748;
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .arch-node.producer { border-color: #4299e1; color: #63b3ed; }
+    .arch-node.queue    { border-color: #f6ad55; color: #f6ad55; }
+    .arch-node.worker   { border-color: #68d391; color: #68d391; }
+    .arch-node.dlq      { border-color: #fc8181; color: #fc8181; }
+
+    .arch-arrow { color: #4a5568; font-size: 18px; padding: 0 8px; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: #1a1d2e;
+      border: 1px solid #2d3748;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .stat-num   { font-size: 32px; font-weight: 700; }
+    .stat-label { font-size: 12px; color: #718096; margin-top: 4px; }
+
+    .stat-card.email  .stat-num { color: #63b3ed; }
+    .stat-card.report .stat-num { color: #b794f4; }
+    .stat-card.image  .stat-num { color: #68d391; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .card {
+      background: #1a1d2e;
+      border: 1px solid #2d3748;
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .card h2 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-demo {
+      width: 100%;
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      margin-bottom: 12px;
+    }
+
+    .btn-demo:hover   { opacity: 0.9; }
+    .btn-demo:active  { transform: scale(0.98); }
+    .btn-demo:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .type-btns { display: flex; flex-direction: column; gap: 10px; }
+
+    .btn-type {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #0f1117;
+      border: 1px solid #2d3748;
+      border-radius: 10px;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      color: #e2e8f0;
+      font-size: 14px;
+      text-align: left;
+      width: 100%;
+    }
+
+    .btn-type:hover { background: #1e2035; }
+
+    .btn-type.email:hover  { border-color: #4299e1; }
+    .btn-type.report:hover { border-color: #9f7aea; }
+    .btn-type.image:hover  { border-color: #68d391; }
+
+    .type-icon {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .type-icon.email  { background: #1a2e4a; color: #63b3ed; }
+    .type-icon.report { background: #2d1f4a; color: #b794f4; }
+    .type-icon.image  { background: #1a3a2a; color: #68d391; }
+
+    .type-info { flex: 1; }
+    .type-info strong { display: block; font-size: 14px; }
+    .type-info span   { font-size: 12px; color: #718096; }
+
+    .type-delay {
+      font-size: 11px;
+      color: #4a5568;
+      background: #0f1117;
+      border: 1px solid #2d3748;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .log-card {
+      background: #1a1d2e;
+      border: 1px solid #2d3748;
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .log-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .log-header h2 { font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+
+    .btn-clear {
+      background: none;
+      border: 1px solid #2d3748;
+      border-radius: 8px;
+      color: #718096;
+      font-size: 12px;
+      padding: 4px 12px;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-clear:hover { border-color: #fc8181; color: #fc8181; }
+
+    .log-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 340px;
+      overflow-y: auto;
+    }
+
+    .log-list::-webkit-scrollbar { width: 4px; }
+    .log-list::-webkit-scrollbar-track { background: #0f1117; }
+    .log-list::-webkit-scrollbar-thumb { background: #2d3748; border-radius: 2px; }
+
+    .log-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #0f1117;
+      border: 1px solid #2d3748;
+      border-radius: 10px;
+      padding: 10px 14px;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .log-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .log-dot.email  { background: #4299e1; }
+    .log-dot.report { background: #9f7aea; }
+    .log-dot.image  { background: #68d391; }
+
+    .log-id      { font-family: monospace; font-size: 12px; color: #718096; min-width: 160px; }
+    .log-type    { font-size: 13px; font-weight: 600; min-width: 70px; }
+    .log-type.email  { color: #63b3ed; }
+    .log-type.report { color: #b794f4; }
+    .log-type.image  { color: #68d391; }
+
+    .log-payload { font-size: 12px; color: #718096; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .log-time    { font-size: 11px; color: #4a5568; flex-shrink: 0; }
+
+    .log-empty {
+      text-align: center;
+      padding: 40px;
+      color: #4a5568;
+      font-size: 14px;
+    }
+
+    #toast {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      background: #1a2e1a;
+      border: 1px solid #276227;
+      color: #68d391;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    #toast.show { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 700px) {
+      .grid  { grid-template-columns: 1fr; }
+      .container { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">MQ</div>
+  <div>
+    <h1>RabbitMQ Dashboard</h1>
+    <p>Практика 27 — Брокеры сообщений</p>
+  </div>
+  <div class="badge">RabbitMQ подключён</div>
+</header>
+
+<div class="container">
+
+  <div class="arch">
+    <h2>Архитектура</h2>
+    <div class="arch-flow">
+      <div class="arch-node producer">Producer (API)</div>
+      <div class="arch-arrow">&#8594;</div>
+      <div class="arch-node queue">task_queue</div>
+      <div class="arch-arrow">&#8594;</div>
+      <div class="arch-node worker">Worker 1</div>
+      <div class="arch-arrow" style="color:#2d3748">&#183;</div>
+      <div class="arch-node worker">Worker 2</div>
+      <div class="arch-arrow">&#8594; ошибка &#8594;</div>
+      <div class="arch-node dlq">dead_letter_queue</div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card email">
+      <div class="stat-num" id="cnt-email">0</div>
+      <div class="stat-label">Email</div>
+    </div>
+    <div class="stat-card report">
+      <div class="stat-num" id="cnt-report">0</div>
+      <div class="stat-label">Report</div>
+    </div>
+    <div class="stat-card image">
+      <div class="stat-num" id="cnt-image">0</div>
+      <div class="stat-label">Image</div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Быстрый запуск</h2>
+      <button class="btn-demo" id="btn-demo5" onclick="sendDemo(5)">
+        Отправить 5 демо-задач
+      </button>
+      <button class="btn-demo" id="btn-demo10" onclick="sendDemo(10)" style="background: linear-gradient(135deg, #6b46c1, #9f7aea);">
+        Отправить 10 демо-задач
+      </button>
+      <p style="font-size:12px;color:#4a5568;text-align:center">
+        email &times; 2 &nbsp;&middot;&nbsp; report &times; 2 &nbsp;&middot;&nbsp; image &times; 1
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>Отправить одну задачу</h2>
+      <div class="type-btns">
+        <button class="btn-type email" onclick="sendOne('email')">
+          <div class="type-icon email">E</div>
+          <div class="type-info">
+            <strong>Email</strong>
+            <span>Отправка письма пользователю</span>
+          </div>
+          <div class="type-delay">~800ms</div>
+        </button>
+        <button class="btn-type report" onclick="sendOne('report')">
+          <div class="type-icon report">R</div>
+          <div class="type-info">
+            <strong>Report</strong>
+            <span>Генерация отчёта</span>
+          </div>
+          <div class="type-delay">~1200ms</div>
+        </button>
+        <button class="btn-type image" onclick="sendOne('image')">
+          <div class="type-icon image">I</div>
+          <div class="type-info">
+            <strong>Image</strong>
+            <span>Обработка изображения</span>
+          </div>
+          <div class="type-delay">~600ms</div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="log-card">
+    <div class="log-header">
+      <h2>Лог отправленных задач</h2>
+      <button class="btn-clear" onclick="clearLog()">Очистить</button>
+    </div>
+    <div class="log-list" id="log">
+      <div class="log-empty" id="log-empty">Нет задач. Нажмите кнопку выше, чтобы отправить.</div>
+    </div>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+  var counts = { email: 0, report: 0, image: 0 };
+
+  function showToast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(function() { t.classList.remove('show'); }, 2500);
+  }
+
+  function addLogItem(task) {
+    var empty = document.getElementById('log-empty');
+    if (empty) empty.remove();
+
+    var log = document.getElementById('log');
+    var time = new Date(task.createdAt).toLocaleTimeString('ru');
+    var payloadStr = JSON.stringify(task.payload);
+
+    var item = document.createElement('div');
+    item.className = 'log-item';
+
+    var dot = document.createElement('div');
+    dot.className = 'log-dot ' + task.type;
+
+    var id = document.createElement('div');
+    id.className = 'log-id';
+    id.textContent = task.id;
+
+    var type = document.createElement('div');
+    type.className = 'log-type ' + task.type;
+    type.textContent = task.type;
+
+    var payload = document.createElement('div');
+    payload.className = 'log-payload';
+    payload.textContent = payloadStr;
+
+    var timeEl = document.createElement('div');
+    timeEl.className = 'log-time';
+    timeEl.textContent = time;
+
+    item.appendChild(dot);
+    item.appendChild(id);
+    item.appendChild(type);
+    item.appendChild(payload);
+    item.appendChild(timeEl);
+
+    log.insertBefore(item, log.firstChild);
+
+    counts[task.type] = (counts[task.type] || 0) + 1;
+    document.getElementById('cnt-' + task.type).textContent = counts[task.type];
+  }
+
+  function sendDemo(count) {
+    var btn = document.getElementById('btn-demo' + count);
+    var originalText = btn.textContent.trim();
+    btn.disabled = true;
+    btn.textContent = 'Отправка...';
+
+    fetch('/tasks/demo/api?count=' + count)
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        data.tasks.forEach(addLogItem);
+        showToast('Готово: ' + data.tasks.length + ' задач добавлено в очередь');
+      })
+      .catch(function(e) {
+        showToast('Ошибка: ' + e.message);
+      })
+      .finally(function() {
+        btn.disabled = false;
+        btn.textContent = originalText;
+      });
+  }
+
+  var samplePayloads = {
+    email: function() {
+      var users = ['alice@example.com', 'bob@example.com', 'carol@example.com'];
+      var subjects = ['Добро пожаловать!', 'Ваш заказ', 'Уведомление'];
+      return {
+        to: users[Math.floor(Math.random() * users.length)],
+        subject: subjects[Math.floor(Math.random() * subjects.length)]
+      };
+    },
+    report: function() {
+      var periods = ['Q1-2026', 'Q2-2026', 'Q4-2025'];
+      return {
+        userId: Math.floor(Math.random() * 100) + 1,
+        period: periods[Math.floor(Math.random() * periods.length)]
+      };
+    },
+    image: function() {
+      var widths = [800, 1200, 1920];
+      var heights = [600, 900, 1080];
+      var i = Math.floor(Math.random() * widths.length);
+      return {
+        fileId: 'img-' + Math.random().toString(36).slice(2, 6),
+        width: widths[i],
+        height: heights[i]
+      };
+    }
+  };
+
+  function sendOne(type) {
+    fetch('/tasks', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: type, payload: samplePayloads[type]() })
+    })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        addLogItem(data.task);
+        showToast('Задача ' + type + ' отправлена');
+      })
+      .catch(function(e) {
+        showToast('Ошибка: ' + e.message);
+      });
+  }
+
+  function clearLog() {
+    var log = document.getElementById('log');
+    log.innerHTML = '<div class="log-empty" id="log-empty">Нет задач. Нажмите кнопку выше, чтобы отправить.</div>';
+    counts.email = 0; counts.report = 0; counts.image = 0;
+    document.getElementById('cnt-email').textContent = '0';
+    document.getElementById('cnt-report').textContent = '0';
+    document.getElementById('cnt-image').textContent = '0';
+  }
+</script>
+
+</body>
+</html>

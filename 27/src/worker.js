@@ -1,7 +1,3 @@
-// Запуск одного воркера:    npm run worker
-// Запуск с ID:              WORKER_ID=1 node src/worker.js
-// Несколько воркеров:       открыть несколько терминалов и запустить с разными WORKER_ID
-
 import amqplib from 'amqplib';
 import { QUEUES } from './setup-queues.js';
 import { processWithRetry } from './retry.js';
@@ -9,42 +5,35 @@ import { processWithRetry } from './retry.js';
 const RABBITMQ_URL = process.env.RABBITMQ_URL || 'amqp://localhost';
 const WORKER_ID = process.env.WORKER_ID || '1';
 const MAX_RETRIES = 3;
-
-// Обработчики задач по типу
-
 const FAIL_CHANCE = 0.4;
-const taskHandlers = {
-  email: async (payload) => {
-    await delay(800);
-    if (Math.random() < FAIL_CHANCE) throw new Error('SMTP сервер недоступен');
-    console.log(`[Worker ${WORKER_ID}]     Email отправлен на ${payload.to}: "${payload.subject}"`);
-  },
-
-  report: async (payload) => {
-    await delay(1200);
-    if (Math.random() < FAIL_CHANCE) throw new Error('База данных временно недоступна');
-    console.log(`[Worker ${WORKER_ID}]    Отчёт сгенерирован для userId=${payload.userId} (${payload.period})`);
-  },
-
-  image: async (payload) => {
-    await delay(600);
-    if (Math.random() < FAIL_CHANCE) throw new Error('Ошибка обработки изображения');
-    console.log(`[Worker ${WORKER_ID}]     Изображение ${payload.fileId} обработано (${payload.width}x${payload.height})`);
-  },
-};
 
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// ── Запуск воркера ───────────────────────────────────────────────────────────
+const taskHandlers = {
+  email: async (payload) => {
+    await delay(800);
+    if (Math.random() < FAIL_CHANCE) throw new Error('SMTP сервер недоступен');
+    console.log(`[Worker ${WORKER_ID}] Email отправлен на ${payload.to}: "${payload.subject}"`);
+  },
+
+  report: async (payload) => {
+    await delay(1200);
+    if (Math.random() < FAIL_CHANCE) throw new Error('База данных временно недоступна');
+    console.log(`[Worker ${WORKER_ID}] Отчёт сгенерирован для userId=${payload.userId} (${payload.period})`);
+  },
+
+  image: async (payload) => {
+    await delay(600);
+    if (Math.random() < FAIL_CHANCE) throw new Error('Ошибка обработки изображения');
+    console.log(`[Worker ${WORKER_ID}] Изображение ${payload.fileId} обработано (${payload.width}x${payload.height})`);
+  },
+};
+
 async function startWorker() {
   const connection = await amqplib.connect(RABBITMQ_URL);
   const channel = await connection.createChannel();
-
-  // assertQueue — убеждаемся, что очередь существует с нужными параметрами.
-  // (очередь уже создана setup-queues.js, но это защита на случай рестарта)
-  await channel.assertQueue(QUEUES.MAIN, { durable: true });
 
   // prefetch(1) — воркер берёт не более 1 сообщения за раз.
   // Это гарантирует равномерное распределение задач между воркерами:
@@ -53,25 +42,23 @@ async function startWorker() {
 
   console.log(`[Worker ${WORKER_ID}] Запущен. Ожидание задач из "${QUEUES.MAIN}"...`);
   console.log(`[Worker ${WORKER_ID}] Retry: до ${MAX_RETRIES} попыток с экспоненциальной задержкой`);
-  console.log(`[Worker ${WORKER_ID}] DLQ: неудачные задачи → "${QUEUES.DLQ}"\n`);
+  console.log(`[Worker ${WORKER_ID}] DLQ: неудачные задачи -> "${QUEUES.DLQ}"\n`);
 
   channel.consume(QUEUES.MAIN, async (msg) => {
     if (!msg) return;
 
     const task = JSON.parse(msg.content.toString());
-    console.log(`[Worker ${WORKER_ID}] ← Получена задача: ${task.id} (type: ${task.type})`);
+    console.log(`[Worker ${WORKER_ID}] Получена задача: ${task.id} (type: ${task.type})`);
 
     const handler = taskHandlers[task.type];
 
     if (!handler) {
-      // Неизвестный тип задачи — сразу в DLQ, retry не нужен
-      console.error(`[Worker ${WORKER_ID}] ✗ Неизвестный тип задачи: "${task.type}" → DLQ`);
+      console.error(`[Worker ${WORKER_ID}] Неизвестный тип задачи: "${task.type}" -> DLQ`);
       channel.nack(msg, false, false);
       return;
     }
 
     try {
-      // Обработка с retry logic и экспоненциальной задержкой
       await processWithRetry(task, (t) => handler(t.payload), {
         maxRetries: MAX_RETRIES,
         baseDelayMs: 500,
@@ -79,13 +66,11 @@ async function startWorker() {
         workerId: WORKER_ID,
       });
 
-      // Успешно обработано — подтверждаем получение (сообщение удалится из очереди)
       channel.ack(msg);
-      console.log(`[Worker ${WORKER_ID}] ✓ Задача ${task.id} выполнена\n`);
+      console.log(`[Worker ${WORKER_ID}] Задача ${task.id} выполнена\n`);
 
     } catch (err) {
-      // Все попытки исчерпаны — отклоняем без возврата в очередь.
-      console.error(`[Worker ${WORKER_ID}] ✗ Задача ${task.id} → DLQ (${err.message})\n`);
+      console.error(`[Worker ${WORKER_ID}] Задача ${task.id} -> DLQ (${err.message})\n`);
       channel.nack(msg, false, false);
     }
   });
