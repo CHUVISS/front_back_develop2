@@ -61,7 +61,7 @@ export default function Optimizations() {
       </div>
 
       <div className="demo-box">
-        <h2>🌳 Демо tree-shaking</h2>
+        <h2>Демо tree-shaking</h2>
         <p>
           Файл <code>mathUtils.js</code> экспортирует <code>add</code>, <code>subtract</code> и{' '}
           <code>multiply</code>. Здесь импортирована только <code>add</code> — остальные две

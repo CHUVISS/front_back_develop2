@@ -1,14 +1,10 @@
 import React, { Suspense, lazy } from 'react';
 import { Routes, Route, NavLink } from 'react-router-dom';
 
-// Маршрут 1: главная страница — статический импорт (загружается сразу)
 import Home from './pages/Home';
 
-// Маршрут 2: страница «О нас» — lazy loading (загружается только при переходе)
-// Бандлер вынесет AboutPage и все её зависимости в отдельный чанк
 const About = lazy(() => import('./pages/About'));
 
-// Маршрут 3: страница «Оптимизации» — тоже lazy
 const Optimizations = lazy(() => import('./pages/Optimizations'));
 
 function LoadingFallback() {
